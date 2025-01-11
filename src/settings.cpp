@@ -758,60 +758,6 @@ void build(sets::Builder &b) {
                     b.endButtons();  // завершить кнопки
                 }
             }  // Расширенные
-
-            {
-                sets::Menu g(b, "примеры");
-                {
-                    sets::Group g(b, "Логи");
-
-                    b.Log(logger);
-                    if (b.Button(kk::logUpdate, "Обновить лог", 0x2f7d34)) {
-                        logger.print(millis() >> 10);
-                        logger.print(" ");
-                        logger.print("день недели:");
-                        logger.println(curDataTime.weekDay);
-                        // logger.print("dht1 sw enbl: ");
-                        // logger.println(data.dht1TempRele_enbl);
-                        b.reload();
-                    }
-                }  // g(b, "Логи");
-                b.Input(kk::txt, "Text");
-                b.Pass(kk::pass, "Password");
-                b.Input(kk::uintw, "uint");
-                {
-                    sets::Group g(b, "групка");
-                    // пример изменения имени виджета
-                    b.Input(kk::btnName, "новое имя кнопки:");
-                    if (b.Button(kk::btnflex, db[kk::btnName], db[kk::btnColor]))
-                        b.reload();
-                    b.Input("intw"_h, "int");
-                    b.Switch("sw1"_h, "switch 1");
-                }
-                //      b.Input(kk::intw, "int");
-                b.Input(kk::int64w, "int 64");
-                // тут тоже могут быть группы
-                {
-                    sets::Group g(b, "тумблерки");
-                    b.Switch("sw2"_h, "switch 2");
-                    b.Switch("sw3"_h, "switch 3");
-                }
-
-                {
-                    sets::Group g(b, "Group 3");
-                    b.Label(kk::lbl1, "lable1");
-                    // b.Label(kk::uptimeDays, "Uptime");
-                    b.Label(kk::lbl2, "millis()", "", sets::Colors::Red);
-                    b.Date(kk::date, "Date");
-                    // b.DateTime(kk::datime, "Datime");
-                    b.Color(kk::color, "Color");
-                    //    b.Switch(kk::toggle2, "Switch");
-                    b.Select(kk::selectw, "Select", "var1;var2;hello");
-                    b.Slider(kk::slider, "Slider", -10, 10, 0.5, "deg");
-                }
-
-                // вне группы. Так тоже можно
-                b.Switch(kk::toggle, "тыр-тырка");
-            }  // Menu-примеры
         }
     }  // Подстройки
 
