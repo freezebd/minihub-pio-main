@@ -52,10 +52,10 @@ void update(sets::Updater &upd) {
 
     upd.update(kk::dayofweek, (String)(WEEKdays[curDataTime.weekDay]));
 
-    upd.update("sens_air_t"_h, (String)(data.value_temp_air + String(" °C")));
-    upd.update("sens_air_h"_h, (String)(data.value_hum_air + String(" %RH")));
-    upd.update("sens_soil_t"_h, (String)(data.value_temp_soil + String(" °C")));
-    upd.update("sens_soil_h"_h, (String)(data.value_hum_soil + String(" %RH")));
+    upd.update(kk::sens_air_t, (String)(data.value_temp_air + String(" °C")));
+    upd.update(kk::sens_air_h, (String)(data.value_hum_air + String(" %RH")));
+    upd.update(kk::sens_soil_t, (String)(data.value_temp_soil + String(" °C")));
+    upd.update(kk::sens_soil_h, (String)(data.value_hum_soil + String(" %RH")));
 
  
 

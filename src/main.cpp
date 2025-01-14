@@ -41,6 +41,8 @@ uint32_t startSeconds = 0;
 uint32_t stopSeconds = 0;
 byte initially = 5;        // первых 10 секунд приписываем время в переменную
 // bool firstSlowSensor = 1;  // опрос датчиков по очереди
+
+
 void setup() {
     each5min.rst();
    // init_pins();
