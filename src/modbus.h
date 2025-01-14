@@ -2,66 +2,98 @@
 #include <Arduino.h>
 #include <ModbusMaster.h>
 #include <SoftwareSerial.h>
+#include "data.h"
 
 SoftwareSerial rs485(16,17);
 ModbusMaster node, node_s;
 
-void setup_bodbus() {
-  // Initialize RS-485 serial communication
-  rs485.begin(4800); // RX, TX pins
-  // Initialize ModbusMaster instance
+void setup_modbus() { // Initialize RS-485 serial communication
+                         
+  rs485.begin(4800);     // RX, TX pins                      
   node_s.begin(1,rs485); // 1 адрес датчика почвы
-  node.begin(2,rs485); // 2 адрес датчика воздуха
+  node.begin(2,rs485);   // 2 адрес датчика воздуха
 }
 
-void readParameter(uint16_t registerAddress, const char* name, float conversionFactor) { //Функция чтения данных датчика воздуха
-  uint8_t result;
-  
-  // Read data from the specified register address
-  result = node.readHoldingRegisters(registerAddress, 2);
+  void read_Air_Hum() { //Чтения данных датчика влажность воздуха
+    uint8_t result_air_h;
+    result_air_h = node.readHoldingRegisters(0x000, 1);
 
-  if (result == node.ku8MBSuccess) {
-    // Convert and print the received data
-    float value = node.getResponseBuffer(0) * conversionFactor;
-    Serial.print(name);
-    Serial.print(": ");
-    Serial.println(value);
-  } else {
-    Serial.print("Error reading ");
-    Serial.print(name);
-    Serial.print(": ");
-    Serial.println(result);
+    if (result_air_h == node.ku8MBSuccess) {
+      // Convert and print the received data
+      data.value_hum_air = (node.getResponseBuffer(0) * 0.1);
+
+      
+      Serial.print("Влажность воздуха: ");
+      Serial.println(data.value_hum_air);
+  
+    } else {
+      Serial.print("Error Влажность воздуха. ");
+    
+      Serial.print(": ");
+      Serial.println(result_air_h);
+    }
+  
+    }
+
+
+  void read_Air_Temp() { //Чтения данных датчика температура воздуха
+    uint8_t result_air_t;
+    result_air_t = node.readHoldingRegisters(0x001, 1);
+    
+  if (result_air_t == node.ku8MBSuccess) {
+      // Convert and print the received data
+      data.value_temp_air = (node.getResponseBuffer(0) * 0.1);
+
+      
+      Serial.print("Температура воздуха: ");
+      Serial.println(data.value_temp_air);
+      Serial.println("");
+    } else {
+      Serial.print("Error Температура воздуха. ");
+      Serial.print(": ");
+      Serial.println(result_air_t);
+    }
   }
-}
 
-void readParameter_Soil(uint16_t registerAddress, const char* name, float conversionFactor) { //Функция чтения данных датчика почвы
-  uint8_t result_soil;
+
+  void read_Soil_Hum() { //Функция чтения данных датчика влажность почвы
+    uint8_t result_soil_h;
+    result_soil_h = node_s.readHoldingRegisters(0x000, 1);
+
+    if (result_soil_h == node_s.ku8MBSuccess) {
+      // Convert and print the received data
+      data.value_hum_soil = (node_s.getResponseBuffer(0) * 0.1);
+
+      
+      Serial.print("Влажность почвы: ");
+      Serial.println(data.value_hum_soil);
   
-  // Read data from the specified register address
-  result_soil = node_s.readHoldingRegisters(registerAddress, 2);
+    } else {
+      Serial.print("Error Влажность почвы. ");
+      Serial.print(": ");
+      Serial.println(result_soil_h);
+    }
+  
+    }
 
-  if (result_soil == node_s.ku8MBSuccess) {
-    // Convert and print the received data
-    float value = node_s.getResponseBuffer(0) * conversionFactor;
-    Serial.print(name);
-    Serial.print(": ");
-    Serial.println(value);
-  } else {
-    Serial.print("Error reading ");
-    Serial.print(name);
-    Serial.print(": ");
-    Serial.println(result_soil);
+
+  void read_Soil_Temp() { //Функция чтения данных датчика температуры почвы
+    uint8_t result_soil_t;
+    result_soil_t = node_s.readHoldingRegisters(0x001, 1);
+    
+  if (result_soil_t == node_s.ku8MBSuccess) {
+      // Convert and print the received data
+      data.value_temp_soil = (node_s.getResponseBuffer(0) * 0.1);
+
+      
+      Serial.print("Температура почвы: ");
+      Serial.println(data.value_temp_soil);
+      Serial.println("");
+    } else {
+      Serial.print("Error Температура почвы почвы ");
+      Serial.print(": ");
+      Serial.println(result_soil_t);
+    }
   }
-}
 
-void riadSensor() { // вызов функции чтение данных с датчиков
-  // Read and print each parameter
-  readParameter(0x0000, "Влажность   воздуха", 0.1); // 0.1%RH
-  readParameter(0x0001, "Температура воздуха", 0.1); // 0.1°C
-  Serial.println("");
-  delay(10);
-  readParameter_Soil(0x0000, "Влажность   почвы", 0.1); // 0.1%RH
-  readParameter_Soil(0x0001, "Температура почвы", 0.1); // 0.1°C
-  Serial.println("");
-  
-}
+  // Тут будет про реле

@@ -17,6 +17,11 @@ DB_KEYS(  // ключи по которым идет привязка к баз�
     dayofweek,
     uptimeDays,
 
+    sens_air_t,
+    sens_air_h,
+    sens_soil_t,
+    sens_soil_h,
+
     dht1name,
     floattempdht1,
     humdht1,
@@ -48,30 +53,15 @@ DB_KEYS(  // ключи по которым идет привязка к баз�
     DS2Rele_led,
 
     t1Discr_name,
-    t1Discr_led,
-    t1Discr_enabled,
-    t1Discr_startTime,
-    t1Discr_endTime,
+   
     t2Discr_name,
-    t2Discr_led,
-    t2Discr_enabled,
-    t2Discr_startTime,
-    t2Discr_endTime,
+    
     t3Discr_name,
-    t3Discr_led,
-    t3Discr_enabled,
-    t3Discr_startTime,
-    t3Discr_endTime,
+    
     t4Discr_name,
-    t4Discr_led,
-    t4Discr_enabled,
-    t4Discr_startTime,
-    t4Discr_endTime,
+   
     t5Discr_name,
-    t5Discr_led,
-    t5Discr_enabled,
-    t5Discr_startTime,
-    t5Discr_endTime,
+    
     t6Discr_name,
     t6Discr_led,
     t6Discr_enabled,
@@ -98,47 +88,7 @@ DB_KEYS(  // ключи по которым идет привязка к баз�
     t1_stopTime,
     t1_btn_accept,
 
-    aquaDoz1_enabled,
-    aquaDoz1_nextDozeIn,
-    aquaDoz1_led,
-    aquaDoz1_1time,
-    aquaDoz1_2time,
-    aquaDoz1_need3rd,
-    aquaDoz1_3time,
-    aquaDoz1_need4th,
-    aquaDoz1_4time,
-    aquaDoz1_need5th,
-    aquaDoz1_5time,
-    aquaDoz1_need6th,
-    aquaDoz1_6time,
-    aquaDoz1_need7th,
-    aquaDoz1_7time,
-    aquaDoz1_need8th,
-    aquaDoz1_8time,
-    aquaDoze1_dozeTime,
-    aquaDoz1_btn_accept,
-    aquaDoz1_makeDoze,
-
-    logUpdate,
-    testlabel,
-
-    btnflex,
-    btnName,
-    btnColor,
-    txt,
-    pass,
-    uintw,
-    intw,
-    int64w,
-
-    color,
-    toggle,
-    slider,
-    selectw,
-
-    lbl1,
-    lbl2,
-
+    
     date,
     datime,
 

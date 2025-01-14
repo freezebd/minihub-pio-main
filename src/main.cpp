@@ -14,18 +14,19 @@
 #endif
 
 #include <GyverDBFile.h>
-#include <GyverDS18.h>
+//#include <GyverDS18.h>
 #include <GyverNTP.h>
 #include <LittleFS.h>
 #include <SettingsGyver.h>
 #include <WiFiConnector.h>
+//#include <modbus.h>
 
 // #include "driver/temp_sensor.h"
 #include "data.h"  // тут лежит структура data по кошерному
 #include "nastroyki.h"
-#include "sensors.h"
+//#include "sensors.h"
 #include "settings.h"
-#include "userTimers.h"
+//#include "userTimers.h"
 
 // обявление фкнций для их видимости из вкладок.
 
@@ -39,10 +40,10 @@ int valNum;
 uint32_t startSeconds = 0;
 uint32_t stopSeconds = 0;
 byte initially = 5;        // первых 10 секунд приписываем время в переменную
-bool firstSlowSensor = 1;  // опрос датчиков по очереди
+// bool firstSlowSensor = 1;  // опрос датчиков по очереди
 void setup() {
     each5min.rst();
-    init_pins();
+   // init_pins();
 
     Serial.begin(115200);
     Serial.println("\n\n\n\t\t\t ESP STARTED !\n\n");
@@ -52,6 +53,7 @@ void setup() {
     sett.begin();
     sett.onBuild(build);
     sett.onUpdate(update);
+    //setup_modbus();          // настройка modbus
 
     // ======== DATABASE ========
 #ifdef ESP32
@@ -64,57 +66,7 @@ void setup() {
     db.init(kk::wifi_pass, WIFIPASS);
     db.init(kk::ntp_gmt, 5);
 
-    db.init(kk::dht1name, "Имя первого dht22");
-    db.init(kk::dht1TempRele_enabled, (uint8_t)0);
-    db.init(kk::dht1TempRele_startTemp, (uint8_t)26);
-    db.init(kk::dht1TempRele_TempThreshold, (uint8_t)1);
-
-    db.init(kk::dht2name, "Имя второго dht22");
-    db.init(kk::dht2HumRele_enabled, (uint8_t)0);
-    db.init(kk::dht2HumRele_startHum, (uint8_t)30);
-    db.init(kk::dht2HumRele_HumThreshold, (uint8_t)1);
-
-    db.init(kk::DS1name, "Имя первого DS18B20");
-    db.init(kk::DS1Rele_enabled, (uint8_t)0);
-    db.init(kk::DS1Rele_startTemp, (uint8_t)26);
-    db.init(kk::DS1Rele_TempThreshold, (uint8_t)1);
-
-    db.init(kk::DS2name, "Имя второго DS18B20");
-    db.init(kk::DS2Rele_enabled, (uint8_t)0);
-    db.init(kk::DS2Rele_startTemp, (uint8_t)24);
-    db.init(kk::DS2Rele_TempThreshold, (uint8_t)1);
-
-    db.init(kk::t1Discr_name, "Реле 1");
-    db.init(kk::t1Discr_enabled, (uint8_t)0);
-    db.init(kk::t1Discr_startTime, (uint32_t)21600ul);
-    db.init(kk::t1Discr_endTime, (uint32_t)72000ul);
-    db.init(kk::t2Discr_name, "Реле 2");
-    db.init(kk::t2Discr_enabled, (uint8_t)0);
-    db.init(kk::t2Discr_startTime, (uint32_t)21600ul);
-    db.init(kk::t2Discr_endTime, (uint32_t)72000ul);
-    db.init(kk::t3Discr_name, "Реле 3");
-    db.init(kk::t3Discr_enabled, (uint8_t)0);
-    db.init(kk::t3Discr_startTime, (uint32_t)21600ul);
-    db.init(kk::t3Discr_endTime, (uint32_t)72000ul);
-    db.init(kk::t4Discr_name, "Реле 4");
-    db.init(kk::t4Discr_enabled, (uint8_t)0);
-    db.init(kk::t4Discr_startTime, (uint32_t)21600ul);
-    db.init(kk::t4Discr_endTime, (uint32_t)72000ul);
-    db.init(kk::t5Discr_name, "Реле 5");
-    db.init(kk::t5Discr_enabled, (uint8_t)0);
-    db.init(kk::t5Discr_startTime, (uint32_t)21600ul);
-    db.init(kk::t5Discr_endTime, (uint32_t)72000ul);
-    db.init(kk::t6Discr_name, "Реле 6 недельное");
-    db.init(kk::t6Discr_enabled, (uint8_t)0);
-    db.init(kk::t6Discr_startTime, (uint32_t)21600ul);
-    db.init(kk::t6Discr_endTime, (uint32_t)72000ul);
-    db.init(kk::t6Discr_inMonday, (uint8_t)0);
-    db.init(kk::t6Discr_inTuesday, (uint8_t)0);
-    db.init(kk::t6Discr_inWensday, (uint8_t)0);
-    db.init(kk::t6Discr_inThursday, (uint8_t)0);
-    db.init(kk::t6Discr_inFriday, (uint8_t)0);
-    db.init(kk::t6Discr_inSaturday, (uint8_t)0);
-    db.init(kk::t6Discr_inSunday, (uint8_t)0);
+   
 
     db.init(kk::t1f_enabled, (uint8_t)0);
     db.init(kk::t1f1_startTime, (uint32_t)21600ul);
@@ -127,105 +79,11 @@ void setup() {
     db.init(kk::t1f5_startTime, (uint32_t)72000ul);
     db.init(kk::t1_stopTime, (uint32_t)75600ul);
 
-    db.init(kk::aquaDoz1_enabled, (uint8_t)0);
-    db.init(kk::aquaDoz1_1time, (uint32_t)25200ul);
-    db.init(kk::aquaDoz1_2time, (uint32_t)43200ul);
-    db.init(kk::aquaDoz1_need3rd, (uint8_t)0);
-    db.init(kk::aquaDoz1_3time, (uint32_t)64800ul);
-    db.init(kk::aquaDoz1_need4th, (uint8_t)0);
-    db.init(kk::aquaDoz1_4time, (uint32_t)72000ul);
-    db.init(kk::aquaDoz1_need5th, (uint8_t)0);
-    db.init(kk::aquaDoz1_5time, (uint32_t)73000ul);
-    db.init(kk::aquaDoz1_need6th, (uint8_t)0);
-    db.init(kk::aquaDoz1_6time, (uint32_t)74000ul);
-    db.init(kk::aquaDoz1_need7th, (uint8_t)0);
-    db.init(kk::aquaDoz1_7time, (uint32_t)75000ul);
-    db.init(kk::aquaDoz1_need8th, (uint8_t)0);
-    db.init(kk::aquaDoz1_8time, (uint32_t)76000ul);
-    db.init(kk::aquaDoze1_dozeTime, (uint16_t)59);
+    
 
-    db.init(kk::btnName, "имечко кнопоньки");
-    db.init(kk::btnColor, 0xff00aa);
-    db.dump(Serial);
-
+    
     // первый запуск всех исполнительных механизмов
-    data.timer_nature_applied = 1;  // запустим природное освещение
-    data.t1f_enbl = db[kk::t1f_enabled];
-    userNatureTimer();
-    data.t1discr_enbl = db[kk::t1Discr_enabled];  // запустим суточные таймеры
-    data.t2discr_enbl = db[kk::t2Discr_enabled];
-    data.t3discr_enbl = db[kk::t3Discr_enabled];
-    data.t4discr_enbl = db[kk::t4Discr_enabled];
-    data.t5discr_enbl = db[kk::t5Discr_enabled];
-    data.t6discr_enbl = db[kk::t6Discr_enabled];
-    userSixTimers();
-    // пересчитываем температуру х10 чтобы не множиться в цикле
-    // tdht1MaxX10
-    // hdht2Min
-    data.dhtOne.tTrigx10 = db[kk::dht1TempRele_startTemp].toInt() * 10;
-    data.dhtTwo.hTrig = db[kk::dht2HumRele_startHum].toInt();
-    // берем показания
-    switch (db[kk::dht1TempRele_TempThreshold].toInt()) {
-        case 0:
-            data.dhtOne.tTreshold = 5;
-            break;
-        case 1:
-            data.dhtOne.tTreshold = 10;
-            break;
-        case 2:
-            data.dhtOne.tTreshold = 20;
-            break;
-        case 3:
-            data.dhtOne.tTreshold = 30;
-            break;
-    }
-    switch (db[kk::dht2HumRele_HumThreshold].toInt()) {
-        case 0:
-            data.dhtTwo.hTreshold = 1;
-            break;
-        case 1:
-            data.dhtTwo.hTreshold = 2;
-            break;
-        case 2:
-            data.dhtTwo.hTreshold = 5;
-            break;
-        case 3:
-            data.dhtTwo.hTreshold = 10;
-            break;
-    }
-    // userDhtRelays();
-    //
-    data.dsOne.tTrigx10 = db[kk::DS1Rele_startTemp].toInt() * 10;
-    data.dsTwo.tTrigx10 = db[kk::DS2Rele_startTemp].toInt() * 10;
-    switch (db[kk::DS1Rele_TempThreshold].toInt()) {
-        case 0:
-            data.dsOne.tTreshold = 2;
-            break;
-        case 1:
-            data.dsOne.tTreshold = 5;
-            break;
-        case 2:
-            data.dsOne.tTreshold = 10;
-            break;
-        case 3:
-            data.dsOne.tTreshold = 30;
-            break;
-    }
-    switch (db[kk::DS2Rele_TempThreshold].toInt()) {
-        case 0:
-            data.dsTwo.tTreshold = 2;
-            break;
-        case 1:
-            data.dsTwo.tTreshold = 5;
-            break;
-        case 2:
-            data.dsTwo.tTreshold = 10;
-            break;
-        case 3:
-            data.dsTwo.tTreshold = 30;
-            break;
-    }
-    // userDSRelays();
+    
 
     // ======== WIFI ========
     // подключение и реакция на подключение или ошибку
@@ -283,10 +141,14 @@ void loop() {
             curDataTime = NTP.getUnix();
         } else
             Serial.println("\n\n\t\t\t\tNTP not reached\n\n");
-        // sensorsProbe(); // опросим датчики
-        getdht1();  // опрос датчика медленный и умножение
-        delay(1);   //  отдадим управление вайфаю
-        getdht2();  // // опрос датчика медленный и умножение
+       
+       // read_Soil_Hum();    // Опрос датчика почвы
+      //  delay(1);   //  отдадим управление вайфаю
+       // read_Air_Hum();  // Опрос датчика воздуха
+      //  delay(1);   //  отдадим управление вайфаю
+       // read_Soil_Temp();   // Опрос датчика почвы
+      //  delay(1);   //  отдадим управление вайфаю
+       // read_Air_Temp();  // Опрос датчика воздухаd
     }  // each5Sec
 
     if (eachSec.ready()) {                  // раз в 1 сек
@@ -296,14 +158,10 @@ void loop() {
             data.secondsUptime = 0;
             data.uptime_Days++;
         }
-        get1ds18();  // тут умножение, часто не вызываем
-        get2ds18();  // тут умножение, часто не вызываем
-        userSixTimers();
-        userNatureTimer();
-        userFertiTimer();
+      
     }
-    userDhtRelays();  // тут ничего медленного, можно часто
-    userDSRelays();   // тут ничего медленного, можно часто
+   // userDhtRelays();  // тут ничего медленного, можно часто
+   // userDSRelays();   // тут ничего медленного, можно часто
 
     
 }  // loop
