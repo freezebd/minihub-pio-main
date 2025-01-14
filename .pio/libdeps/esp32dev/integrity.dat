@@ -1,7 +1,9 @@
 gyverlibs/GyverDB
-adafruit/Adafruit Unified Sensor
 gyverlibs/Settings
-adafruit/DHT sensor library
-gyverlibs/WiFiConnector
-gyverlibs/GyverNTP
 gyverlibs/GyverDS18
+plerup/EspSoftwareSerial
+gyverlibs/WiFiConnector
+4-20ma/ModbusMaster
+adafruit/Adafruit Unified Sensor
+gyverlibs/GyverNTP
+adafruit/DHT sensor library

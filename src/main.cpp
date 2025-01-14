@@ -235,12 +235,12 @@ void setup() {
         Serial.print("Con with IP: ");
         Serial.println(WiFi.localIP());
         indikator.setPeriod(3000, 1, 200, 150);  // раз в 000 сек, 0 раз взмигнем - по 00 милисек периоды, гореть будем 0 милисек
-        gotWifi = true;
-        NTP.begin();
+        gotWifi= true;
+        
+    });NTP.begin();
         NTP.setPeriod(600);  // обновлять раз в 600 сек
         NTP.tick();
         NTP.setGMT(db[kk::ntp_gmt]);
-    });
     WiFiConnector.onError([]() {
         Serial.print("Error! start AP ");
         Serial.println(WiFi.softAPIP());
