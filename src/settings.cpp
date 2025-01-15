@@ -161,10 +161,7 @@ void build(sets::Builder &b) {
                 b.Input(kk::t4Discr_name, "Имя Реле4:");
                 b.Input(kk::t5Discr_name, "Имя Реле5:");
                 b.Input(kk::t6Discr_name, "Имя Реле6:");
-                b.Input(kk::dht1name, "dht22 1:");
-                b.Input(kk::dht2name, "dht22 2:");
-                b.Input(kk::DS1name, "DS18B20 1:");
-                b.Input(kk::DS2name, "DS18B20 2:");
+                
             }
             {
                 sets::Menu g(b, "Расширенные");

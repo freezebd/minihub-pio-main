@@ -12,25 +12,19 @@
 #else
 #include <WiFi.h>
 #endif
-
 #include <GyverDBFile.h>
-//#include <GyverDS18.h>
 #include <GyverNTP.h>
 #include <LittleFS.h>
 #include <SettingsGyver.h>
 #include <WiFiConnector.h>
-//#include <modbus.h>
-
-// #include "driver/temp_sensor.h"
+//#include "modbus.h"
 #include "data.h"  // тут лежит структура data по кошерному
 #include "nastroyki.h"
-//#include "sensors.h"
 #include "settings.h"
-//#include "userTimers.h"
 
 // обявление фкнций для их видимости из вкладок.
 
-Timer each5Sec(5000ul);    // таймер раз в 10 сек
+Timer each5Sec(5000ul);    // таймер раз в 5 сек
 Timer each5min(300000ul);  // таймер раз в 5 мин
 Timer eachSec(1000ul);     // таймер раз в сек
 
@@ -40,22 +34,25 @@ int valNum;
 uint32_t startSeconds = 0;
 uint32_t stopSeconds = 0;
 byte initially = 5;        // первых 10 секунд приписываем время в переменную
-// bool firstSlowSensor = 1;  // опрос датчиков по очереди
 
+uint32_t prevMs = 0;  // переменная для Проверка время цикла Loop
+byte checker = 0; // переменная автомат датчиков
 
 void setup() {
     each5min.rst();
-   // init_pins();
 
     Serial.begin(115200);
     Serial.println("\n\n\n\t\t\t ESP STARTED !\n\n");
+    //setup_modbus();          // настройка modbus
+
+
 
     // ======== SETTINGS ========
     WiFi.mode(WIFI_AP_STA);  // режим AP_STA. Вызываем перед sett.begin(), чтобы settings знал о текущем режиме wifi
     sett.begin();
     sett.onBuild(build);
     sett.onUpdate(update);
-    //setup_modbus();          // настройка modbus
+    
 
     // ======== DATABASE ========
 #ifdef ESP32
@@ -69,7 +66,7 @@ void setup() {
     db.init(kk::ntp_gmt, 5);
 
    
-
+/*
     db.init(kk::t1f_enabled, (uint8_t)0);
     db.init(kk::t1f1_startTime, (uint32_t)21600ul);
     db.init(kk::t1f2_startTime, (uint32_t)25200ul);
@@ -81,7 +78,7 @@ void setup() {
     db.init(kk::t1f5_startTime, (uint32_t)72000ul);
     db.init(kk::t1_stopTime, (uint32_t)75600ul);
 
-    
+    */
 
     
     // первый запуск всех исполнительных механизмов
@@ -109,12 +106,18 @@ void setup() {
     });
 
     WiFiConnector.connect(db[kk::wifi_ssid], db[kk::wifi_pass]);
-    //  getdht1(); //опрос медленных датчиков
-    //  delay(1);
-    //   getdht2();
+    
 }  // setup
-
+   
 void loop() {
+    // Проверка время цикла Loop
+    if((millis()-prevMs) > 2ul){
+    Serial.print("время цикла: ");
+    Serial.println(millis()-prevMs);
+    }
+    prevMs = millis();
+    //весь код лупа ниже  
+
     // если wifi связь есть, сбрасываем вочдог таймер 5 минутный.
     // если нет связи, ждем 5 минут и ребутаемся, а то мало ли
     // если связь восстановилась после потери, снова мигаем плавно
@@ -143,15 +146,31 @@ void loop() {
             curDataTime = NTP.getUnix();
         } else
             Serial.println("\n\n\t\t\t\tNTP not reached\n\n");
-       
-       // read_Soil_Hum();    // Опрос датчика почвы
-      //  delay(1);   //  отдадим управление вайфаю
-       // read_Air_Hum();  // Опрос датчика воздуха
-      //  delay(1);   //  отдадим управление вайфаю
-       // read_Soil_Temp();   // Опрос датчика почвы
-      //  delay(1);   //  отдадим управление вайфаю
-       // read_Air_Temp();  // Опрос датчика воздухаd
+    }
+    
+    /*
+    // пример конечного автомата.
+    if (each5Sec.ready())  // раз в 5 сек
+    {
+        switch (checker) {
+        case 0: // INIT
+            checker = 5;
+            break;
+        case 5: // SOIL
+            read_Soil_Hum();    // Опрос датчика почвы
+            delay(1);   //  отдадим управление вайфаю
+            read_Soil_Temp();
+            checker = 10;
+            break;
+        case 10://AIR
+            read_Air_Hum();  // Опрос датчика воздуха
+            delay(1);   //  отдадим управление вайфаю
+            read_Air_Temp();  // Опрос датчика воздуха
+            checker = 5;
+            break;
+        }//switch(checker)
     }  // each5Sec
+   */
 
     if (eachSec.ready()) {                  // раз в 1 сек
         data.secondsNow++;                  // инкермент реалтайм
@@ -159,8 +178,8 @@ void loop() {
         if (data.secondsUptime == 86399) {  // инкремент дней аптайма
             data.secondsUptime = 0;
             data.uptime_Days++;
-        }
-      
+        } 
+
     }
    // userDhtRelays();  // тут ничего медленного, можно часто
    // userDSRelays();   // тут ничего медленного, можно часто

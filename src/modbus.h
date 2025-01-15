@@ -4,8 +4,8 @@
 #include <SoftwareSerial.h>
 #include "data.h"
 
-SoftwareSerial rs485(16,17);
-ModbusMaster node, node_s;
+ SoftwareSerial rs485(16,17);
+ ModbusMaster node, node_s;
 
 void setup_modbus() { // Initialize RS-485 serial communication
                          
@@ -92,7 +92,6 @@ void setup_modbus() { // Initialize RS-485 serial communication
     } else {
       Serial.print("Error Температура почвы почвы ");
       Serial.print(": ");
-      Serial.println(result_soil_t);
     }
   }
 

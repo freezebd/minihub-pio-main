@@ -22,36 +22,6 @@ DB_KEYS(  // ключи по которым идет привязка к баз�
     sens_soil_t,
     sens_soil_h,
 
-    dht1name,
-    floattempdht1,
-    humdht1,
-    dht1TempRele_enabled,
-    dht1TempRele_startTemp,
-    dht1TempRele_TempThreshold,
-    dht1Rele_led,
-
-    dht2name,
-    floattempdht2,
-    humdht2,
-    dht2HumRele_enabled,
-    dht2HumRele_startHum,
-    dht2HumRele_HumThreshold,
-    dht2Rele_led,
-
-    DS1name,
-    floattempDS1,
-    DS1Rele_enabled,
-    DS1Rele_startTemp,
-    DS1Rele_TempThreshold,
-    DS1Rele_led,
-
-    DS2name,
-    floattempDS2,
-    DS2Rele_enabled,
-    DS2Rele_startTemp,
-    DS2Rele_TempThreshold,
-    DS2Rele_led,
-
     t1Discr_name,
    
     t2Discr_name,
@@ -63,17 +33,7 @@ DB_KEYS(  // ключи по которым идет привязка к баз�
     t5Discr_name,
     
     t6Discr_name,
-    t6Discr_led,
-    t6Discr_enabled,
-    t6Discr_startTime,
-    t6Discr_endTime,
-    t6Discr_inMonday,
-    t6Discr_inTuesday,
-    t6Discr_inWensday,
-    t6Discr_inThursday,
-    t6Discr_inFriday,
-    t6Discr_inSaturday,
-    t6Discr_inSunday,
+    
 
     t1f_enabled,
     t1f_led,
