@@ -13,7 +13,7 @@
 // static SettingsESP sett(PROJECT_NAME " v" PROJECT_VER, &db);
 
 GyverDBFile db(&LittleFS, "/nicelight.db");      // база данных для хранения настроек будет автоматически записываться в файл при изменениях
-SettingsGyver sett("Горошек для любимой", &db);  // указывается заголовок меню, подключается база данных
+SettingsGyver sett("Сеньор-Помидор", &db);  // указывается заголовок меню, подключается база данных
 Datime curDataTime(NTP);                         // NTP это объект типа GyverNTPClient, наследует stampticker (С) Гайвер
 static bool notice_f;                            // флаг на отправку уведомления о подключении к wifi
 

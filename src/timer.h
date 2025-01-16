@@ -10,6 +10,7 @@
 
 #pragma once
 #include <Arduino.h>
+
 class Timer {
   public:
     Timer(uint32_t nprd = 0) {

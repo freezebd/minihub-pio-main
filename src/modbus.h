@@ -21,16 +21,10 @@ void setup_modbus() { // Initialize RS-485 serial communication
     if (result_air_h == node.ku8MBSuccess) {
       // Convert and print the received data
       data.value_hum_air = (node.getResponseBuffer(0) * 0.1);
-
-      
-      Serial.print("Влажность воздуха: ");
-      Serial.println(data.value_hum_air);
-  
+     // Serial.print("Влажность воздуха: ");
+     // Serial.println(data.value_hum_air);
     } else {
-      Serial.print("Error Влажность воздуха. ");
-    
-      Serial.print(": ");
-      Serial.println(result_air_h);
+      data.value_hum_air = -100.0;
     }
   
     }
@@ -43,15 +37,11 @@ void setup_modbus() { // Initialize RS-485 serial communication
   if (result_air_t == node.ku8MBSuccess) {
       // Convert and print the received data
       data.value_temp_air = (node.getResponseBuffer(0) * 0.1);
-
-      
-      Serial.print("Температура воздуха: ");
-      Serial.println(data.value_temp_air);
-      Serial.println("");
+     // Serial.print("Температура воздуха: ");
+     // Serial.println(data.value_temp_air);
+     // Serial.println("");
     } else {
-      Serial.print("Error Температура воздуха. ");
-      Serial.print(": ");
-      Serial.println(result_air_t);
+      data.value_temp_air = -100.0;
     }
   }
 
@@ -63,15 +53,11 @@ void setup_modbus() { // Initialize RS-485 serial communication
     if (result_soil_h == node_s.ku8MBSuccess) {
       // Convert and print the received data
       data.value_hum_soil = (node_s.getResponseBuffer(0) * 0.1);
-
-      
-      Serial.print("Влажность почвы: ");
-      Serial.println(data.value_hum_soil);
+     // Serial.print("Влажность почвы: ");
+     // Serial.println(data.value_hum_soil);
   
     } else {
-      Serial.print("Error Влажность почвы. ");
-      Serial.print(": ");
-      Serial.println(result_soil_h);
+      data.value_hum_soil = -100.0;
     }
   
     }
@@ -83,15 +69,12 @@ void setup_modbus() { // Initialize RS-485 serial communication
     
   if (result_soil_t == node_s.ku8MBSuccess) {
       // Convert and print the received data
-      data.value_temp_soil = (node_s.getResponseBuffer(0) * 0.1);
-
-      
-      Serial.print("Температура почвы: ");
-      Serial.println(data.value_temp_soil);
-      Serial.println("");
+      data.value_temp_soil = (node_s.getResponseBuffer(0) * 0.1); 
+     // Serial.print("Температура почвы: ");
+     // Serial.println(data.value_temp_soil);
+     // Serial.println("");
     } else {
-      Serial.print("Error Температура почвы почвы ");
-      Serial.print(": ");
+      data.value_temp_soil = -100.0;
     }
   }
 

@@ -17,10 +17,10 @@
 #include <LittleFS.h>
 #include <SettingsGyver.h>
 #include <WiFiConnector.h>
-//#include "modbus.h"
 #include "data.h"  // тут лежит структура data по кошерному
 #include "nastroyki.h"
 #include "settings.h"
+#include "modbus.h"
 
 // обявление фкнций для их видимости из вкладок.
 
@@ -43,7 +43,7 @@ void setup() {
 
     Serial.begin(115200);
     Serial.println("\n\n\n\t\t\t ESP STARTED !\n\n");
-    //setup_modbus();          // настройка modbus
+    setup_modbus();          // настройка modbus
 
 
 
@@ -148,10 +148,14 @@ void loop() {
             Serial.println("\n\n\t\t\t\tNTP not reached\n\n");
     }
     
-    /*
+    
     // пример конечного автомата.
-    if (each5Sec.ready())  // раз в 5 сек
-    {
+   // if (each5Sec.ready())  // раз в 5 сек
+   // {
+
+   static uint32_t ms4 = 0;
+  if (millis() - ms4 >= 1000) {
+   ms4 = millis();
         switch (checker) {
         case 0: // INIT
             checker = 5;
@@ -170,7 +174,7 @@ void loop() {
             break;
         }//switch(checker)
     }  // each5Sec
-   */
+   
 
     if (eachSec.ready()) {                  // раз в 1 сек
         data.secondsNow++;                  // инкермент реалтайм

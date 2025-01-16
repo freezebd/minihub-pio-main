@@ -32,10 +32,10 @@ struct Data  // обьявляем класс структуры
 
 
     // Переменные датчиков
-    uint16_t value_temp_air = 0;  // датчик температуры воздуха rs485
-    uint16_t value_hum_air = 0;   // датчик влажности воздуха rs485
-    uint16_t value_temp_soil = 0; // датчик температуры почвы rs485
-    uint16_t value_hum_soil = 0;  // датчик влажности почвы rs485
+    float value_temp_air = -100.0;  // датчик температуры воздуха rs485
+    float value_hum_air = -100.0;   // датчик влажности воздуха rs485
+    float value_temp_soil = -100.0; // датчик температуры почвы rs485
+    float value_hum_soil = -100.0;  // датчик влажности почвы rs485
 
 };
 
